@@ -1,22 +1,17 @@
 import express from 'express'
+import { postRoutes } from './routes/postsRoutes'
+import { MongoClient } from 'mongodb'
 
-//the same as saying create server
 const app = express()
 
-//method to make the app listen
 app.use(express.json())
 
-//app.httpmethod(Path, Handler)
-//get example
-app.get('/', (req,res)=>{
-    res.status(200).json({msg: "Hello User"})
-})
+app.use('/api/posts', postRoutes)
 
-//post example
-app.post('/', (req,res)=>{
-    console.log(req.body)
-
-    res.status(200).json({msg: "Post Request"})
-})
+//connect mongodb to server then showing that connection went fine
+MongoClient.connect("mongodb://localhost:27017").then(()=>{
+    console.log("Connected to DB succesfully!");
+}).catch((err)=>console.log(err));
+//catching any error and displaying it
 
 app.listen(4000, 'localhost', ()=>console.log("Listening to port 4000."))
